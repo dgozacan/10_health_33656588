@@ -2,6 +2,7 @@
 const express = require("express");
 const router = express.Router();
 
+// Redirect to login if user not logged in (Goldsmiths-safe)
 function redirectLogin(req, res, next) {
   if (!req.session.loggedIn) {
     return res.redirect("../users/login");
@@ -9,14 +10,17 @@ function redirectLogin(req, res, next) {
   next();
 }
 
+// Show add workout form
 router.get("/add", redirectLogin, (req, res) => {
   res.render("add_workout", { error: null });
 });
 
+// Handle add workout form
 router.post("/add", redirectLogin, (req, res) => {
   const workout_date = req.body.workout_date;
   const workout_name = req.body.workout_name;
   const body_part = req.body.body_part;
+  const next_body_part = req.body.next_body_part; // NEW
   const duration_mins = req.body.duration_mins;
   const notes = req.body.notes;
 
@@ -28,8 +32,8 @@ router.post("/add", redirectLogin, (req, res) => {
 
   const sql = `
     INSERT INTO workouts
-    (user_id, workout_date, workout_name, body_part, duration_mins, notes)
-    VALUES (?, ?, ?, ?, ?, ?)
+    (user_id, workout_date, workout_name, body_part, next_body_part, duration_mins, notes)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
   `;
 
   global.db.query(
@@ -39,6 +43,7 @@ router.post("/add", redirectLogin, (req, res) => {
       workout_date,
       workout_name,
       body_part,
+      next_body_part || null,
       duration_mins,
       notes || null
     ],
@@ -50,7 +55,7 @@ router.post("/add", redirectLogin, (req, res) => {
         });
       }
 
-      
+      // Relative redirect back to home
       res.redirect("../");
     }
   );
@@ -61,15 +66,22 @@ router.get("/search", redirectLogin, (req, res) => {
   const q = req.query.q ? req.query.q.trim() : "";
 
   let sql = `
-    SELECT workout_date, workout_name, body_part, duration_mins, notes
+    SELECT workout_date, workout_name, body_part, next_body_part, duration_mins, notes
     FROM workouts
     WHERE user_id = ?
   `;
   let params = [req.session.user_id];
 
   if (q) {
-    sql += " AND (workout_name LIKE ? OR body_part LIKE ? OR notes LIKE ?)";
-    params.push(`%${q}%`, `%${q}%`, `%${q}%`);
+    sql += `
+      AND (
+        workout_name LIKE ?
+        OR body_part LIKE ?
+        OR next_body_part LIKE ?
+        OR notes LIKE ?
+      )
+    `;
+    params.push(`%${q}%`, `%${q}%`, `%${q}%`, `%${q}%`);
   }
 
   sql += " ORDER BY workout_date DESC";

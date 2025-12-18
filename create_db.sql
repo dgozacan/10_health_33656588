@@ -15,8 +15,11 @@ CREATE TABLE workouts (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL,
   workout_date DATE NOT NULL,
-  type VARCHAR(60) NOT NULL,
+  workout_name VARCHAR(60) NOT NULL,
+  body_part VARCHAR(30) NOT NULL,
+  next_body_part VARCHAR(30),
   duration_mins INT NOT NULL,
   notes VARCHAR(255),
   FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
