@@ -11,28 +11,39 @@
     <p class="error"><%= error %></p>
   <% } %>
 
-  <form method="POST" action="/workouts/add">
+  <form method="POST" action="./add">
     <p>Date</p>
-    <input type="date" name="workout_date" />
+    <input type="date" name="workout_date" required />
 
-    <p>Type (Run / Weights / Yoga, etc.)</p>
-    <input name="type" />
+    <p>Workout name (e.g. Leg day, Push session, Run)</p>
+    <input name="workout_name" required />
+
+    <p>Body part trained</p>
+    <select name="body_part" required>
+      <option value="">-- Select --</option>
+      <option value="Legs">Legs</option>
+      <option value="Chest">Chest</option>
+      <option value="Back">Back</option>
+      <option value="Shoulders">Shoulders</option>
+      <option value="Arms">Arms</option>
+      <option value="Core">Core</option>
+      <option value="Cardio">Cardio</option>
+    </select>
 
     <p>Duration (mins)</p>
-    <input type="number" name="duration_mins" min="1" />
+    <input type="number" name="duration_mins" min="1" required />
 
-    <p>Body part you want to work next time</p>
-<select name="next_body_part">
-  <option value="">-- No plan yet --</option>
-  <option value="Legs">Legs</option>
-  <option value="Chest">Chest</option>
-  <option value="Back">Back</option>
-  <option value="Shoulders">Shoulders</option>
-  <option value="Arms">Arms</option>
-  <option value="Core">Core</option>
-  <option value="Cardio">Cardio</option>
-</select>
-
+    <p>Body part you want to work next time (optional)</p>
+    <select name="next_body_part">
+      <option value="">-- No plan yet --</option>
+      <option value="Legs">Legs</option>
+      <option value="Chest">Chest</option>
+      <option value="Back">Back</option>
+      <option value="Shoulders">Shoulders</option>
+      <option value="Arms">Arms</option>
+      <option value="Core">Core</option>
+      <option value="Cardio">Cardio</option>
+    </select>
 
     <p>Notes (optional)</p>
     <input name="notes" />
@@ -40,6 +51,6 @@
     <p><button type="submit">Save</button></p>
   </form>
 
-  <p><a href="/">Home</a></p>
+  <p><a href="../">Home</a></p>
 </body>
 </html>

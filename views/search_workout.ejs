@@ -7,8 +7,8 @@
 <body>
   <h1>Search Workouts</h1>
 
-  <form method="GET" action="/workouts/search">
-    <input name="q" value="<%= q %>" placeholder="search type or notes" />
+  <form method="GET" action="./search">
+    <input name="q" value="<%= q %>" placeholder="search workout, body part, or notes" />
     <button type="submit">Search</button>
   </form>
 
@@ -21,14 +21,19 @@
       <% rows.forEach(r => { %>
         <li>
           <strong><%= r.workout_date %></strong> —
-          <%= r.type %> —
+          <%= r.workout_name %> (<%= r.body_part %>) —
           <%= r.duration_mins %> mins
-          <% if (r.notes) { %> — <%= r.notes %> <% } %>
+          <% if (r.next_body_part) { %>
+            — next: <%= r.next_body_part %>
+          <% } %>
+          <% if (r.notes) { %>
+            — <%= r.notes %>
+          <% } %>
         </li>
       <% }) %>
     </ul>
   <% } %>
 
-  <p><a href="/">Home</a></p>
+  <p><a href="../">Home</a></p>
 </body>
 </html>
