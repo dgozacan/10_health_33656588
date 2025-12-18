@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+<head>
+  <title>Search Workouts</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <h1>Search Workouts</h1>
+
+  <form method="GET" action="/workouts/search">
+    <input name="q" value="<%= q %>" placeholder="search type or notes" />
+    <button type="submit">Search</button>
+  </form>
+
+  <h2>Results</h2>
+
+  <% if (rows.length === 0) { %>
+    <p>No workouts found.</p>
+  <% } else { %>
+    <ul>
+      <% rows.forEach(r => { %>
+        <li>
+          <strong><%= r.workout_date %></strong> —
+          <%= r.type %> —
+          <%= r.duration_mins %> mins
+          <% if (r.notes) { %> — <%= r.notes %> <% } %>
+        </li>
+      <% }) %>
+    </ul>
+  <% } %>
+
+  <p><a href="/">Home</a></p>
+</body>
+</html>

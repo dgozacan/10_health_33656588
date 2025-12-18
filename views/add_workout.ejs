@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head>
+  <title>Add Workout</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <h1>Add Workout</h1>
+
+  <% if (error) { %>
+    <p class="error"><%= error %></p>
+  <% } %>
+
+  <form method="POST" action="/workouts/add">
+    <p>Date</p>
+    <input type="date" name="workout_date" />
+
+    <p>Type (Run / Weights / Yoga)</p>
+    <input name="type" />
+
+    <p>Duration (mins)</p>
+    <input type="number" name="duration_mins" min="1" />
+
+    <p>Notes (optional)</p>
+    <input name="notes" />
+
+    <p><button type="submit">Save</button></p>
+  </form>
+
+  <p><a href="/">Home</a></p>
+</body>
+</html>

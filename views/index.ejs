@@ -1,16 +1,72 @@
 <!doctype html>
 <html>
-  <head>
-    <title><%=shopName%></title>
-    <link rel="stylesheet" href="/css/style.css">
-  </head>
-  <body>
-    <h1>Welcome to <%=shopName%> Shop</h1>
-    <h2>Here are some things that we sell:</h2>
-    <ul>
-      <% for(let i = 0; i < productCategories.length; i++) { %>
-        <li><%= productCategories[i] %></li>
-      <% } %>
-    </ul>
-  </body>
+<head>
+  <title>Health & Fitness Tracker</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+
+  <h1>Welcome to Your Fitness Tracker</h1>
+
+  <p>
+    This app helps you log and track your workouts, and suggests what you should
+    train next based on your most recent workout.
+  </p>
+
+  <% if (loggedIn) { %>
+
+    <p>
+      You are logged in as <strong><%= username %></strong>.
+    </p>
+
+    <% if (lastWorkout) { %>
+
+      <h2>Your Last Workout</h2>
+      <p>
+        On <strong><%= lastWorkout.workout_date %></strong> you did
+        <strong><%= lastWorkout.type %></strong> for
+        <strong><%= lastWorkout.duration_mins %></strong> minutes.
+        <% if (lastWorkout.notes) { %>
+          <br/>
+          Notes: <%= lastWorkout.notes %>
+        <% } %>
+      </p>
+
+      <h2>Suggested Next Workout</h2>
+      <p>
+        <%= suggestion %>
+      </p>
+
+    <% } else { %>
+
+      <h2>No workouts yet</h2>
+      <p>
+        You haven’t logged any workouts yet.
+        Start by <a href="/workouts/add">adding your first workout</a>.
+      </p>
+
+    <% } %>
+
+    <hr>
+
+    <p>
+      <a href="/workouts/add">Add a New Workout</a>
+      <a href="/workouts/search">Search Your Workouts</a>
+      <a href="/users/logout">Logout</a>
+    </p>
+
+  <% } else { %>
+
+    <p>
+      <a href="/users/login">Login</a> to start tracking your workouts and receive
+      personalised workout suggestions.
+    </p>
+
+  <% } %>
+
+  <p>
+    <a href="/about">About This App</a>
+  </p>
+
+</body>
 </html>

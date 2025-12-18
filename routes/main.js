@@ -1,46 +1,74 @@
-
-// Handle the main routes
-// Create a new router
+// routes/main.js
 const express = require("express");
 const router = express.Router();
-// Define our data
-var shopData = {
-    shopName: "Pirate Bay Alcohol", 
-    productCategories: ["Beer", "Wine", "Rum", "Whiskey", "Soft Drinks", "Hot Drinks"],
-    shops: [
-        { location: "London Bridge", manager: "Captain Jack Sparrow", address: "123 Thames St, London SE1 9RT" },
-        { location: "Camden Town", manager: "Blackbeard Jones", address: "456 Camden High St, London NW1 7JR" },
-        { location: "Shoreditch", manager: "Anne Bonny", address: "789 Brick Lane, London E1 6QL" }
-    ]
+
+// Very simple keyword -> category
+function guessCategory(typeText) {
+  const t = (typeText || "").toLowerCase();
+
+  if (t.includes("leg") || t.includes("squat") || t.includes("lunge")) return "legs";
+  if (t.includes("chest") || t.includes("bench") || t.includes("push")) return "chest";
+  if (t.includes("back") || t.includes("row") || t.includes("pull")) return "back";
+  if (t.includes("shoulder") || t.includes("ohp") || t.includes("press")) return "shoulders";
+  if (t.includes("arm") || t.includes("bicep") || t.includes("tricep") || t.includes("curl")) return "arms";
+  if (t.includes("core") || t.includes("abs") || t.includes("plank")) return "core";
+  if (t.includes("run") || t.includes("cardio") || t.includes("cycle") || t.includes("bike")) return "cardio";
+
+  return "general";
 }
-// Handle the main routes
+
+// Simple “what’s next” rule
+function suggestNext(category) {
+  const plan = {
+    legs: "chest",
+    chest: "back",
+    back: "shoulders",
+    shoulders: "arms",
+    arms: "core",
+    core: "legs",
+    cardio: "legs",
+    general: "full body",
+  };
+  return plan[category] || "full body";
+}
+
 router.get("/", (req, res) => {
-    res.render("index.ejs", shopData)
+  // If not logged in, just show normal home page
+  if (!req.session.loggedIn) {
+    return res.render("index", { lastWorkout: null, suggestion: null });
+  }
+
+  // Logged in: find their most recent workout
+  const sql =
+    "SELECT workout_date, type, duration_mins, notes FROM workouts WHERE user_id = ? ORDER BY workout_date DESC, id DESC LIMIT 1";
+
+  global.db.query(sql, [req.session.user_id], (err, results) => {
+    if (err) {
+      console.log(err);
+      return res.render("index", { lastWorkout: null, suggestion: null });
+    }
+
+    if (results.length === 0) {
+      // No workouts yet
+      return res.render("index", {
+        lastWorkout: null,
+        suggestion: "Start with a full body workout or some light cardio.",
+      });
+    }
+
+    const lastWorkout = results[0];
+    const category = guessCategory(lastWorkout.type);
+    const next = suggestNext(category);
+
+    return res.render("index", {
+      lastWorkout,
+      suggestion: `Based on your last workout (${category}), your next workout could be: ${next}.`,
+    });
+  });
 });
 
 router.get("/about", (req, res) => {
-    res.render("about.ejs", shopData)
+  res.render("about");
 });
 
-router.get("/search", (req, res) => {
-    res.render("search.ejs", shopData)
-});
-
-router.get('/search_result', function (req, res) {
-    // TODO: search in the database
-    res.send("You searched for " + req.query.search_text + " in " + req.query.category);
-});
-
-router.get("/register", (req, res) => {
-    res.render("register.ejs", shopData);
-});
-
-router.post("/registered", (req, res) => {
-    res.send('Hello ' + req.body.first + ' ' + req.body.last + 
-             ' you are now registered! We will send an email to ' + req.body.email);
-});
-
-
-
-// Export the router object so index.js can access it
 module.exports = router;
