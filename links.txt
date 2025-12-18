@@ -1,0 +1,6 @@
+home= https://doc.gold.ac.uk/usr/339/
+login= https://doc.gold.ac.uk/usr/339/users/login
+about = https://doc.gold.ac.uk/usr/339/about
+add_workout= https://doc.gold.ac.uk/usr/339/workouts/add
+search_workout = https://doc.gold.ac.uk/usr/339/workouts/search
+
