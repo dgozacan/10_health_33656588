@@ -2,7 +2,6 @@
 const express = require("express");
 const router = express.Router();
 
-// Very simple keyword -> category
 function guessCategory(typeText) {
   const t = (typeText || "").toLowerCase();
 
@@ -17,7 +16,6 @@ function guessCategory(typeText) {
   return "general";
 }
 
-// Simple “what’s next” rule
 function suggestNext(category) {
   const plan = {
     legs: "chest",
@@ -38,7 +36,6 @@ router.get("/", (req, res) => {
     return res.render("index", { lastWorkout: null, suggestion: null });
   }
 
-  // Logged in: find their most recent workout
   const sql =
     "SELECT workout_date, type, duration_mins, notes FROM workouts WHERE user_id = ? ORDER BY workout_date DESC, id DESC LIMIT 1";
 

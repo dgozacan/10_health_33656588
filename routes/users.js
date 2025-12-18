@@ -12,7 +12,9 @@ router.post("/login", (req, res) => {
   const password = req.body.password;
 
   if (!username || !password) {
-    return res.render("login", { error: "Please enter username and password." });
+    return res.render("login", {
+      error: "Please enter username and password."
+    });
   }
 
   const sql = "SELECT * FROM users WHERE username = ?";
@@ -38,7 +40,9 @@ router.post("/login", (req, res) => {
       req.session.username = user.username;
       req.session.user_id = user.id;
 
-      return res.redirect("/");
+      // ✅ IMPORTANT: relative redirect (stays inside /usr/339/)
+      return res.redirect("../");
+
     } catch (e) {
       console.log(e);
       return res.render("login", { error: "Login failed." });
@@ -47,9 +51,15 @@ router.post("/login", (req, res) => {
 });
 
 router.get("/logout", (req, res) => {
-  req.session.destroy((err) => {
-    if (err) return res.redirect("/");
-    res.send("you are now logged out. <a href='/'>Home</a>");
+  req.session.destroy(err => {
+    if (err) {
+      return res.redirect("../");
+    }
+
+    // ✅ No absolute links
+    res.send(
+      "You are now logged out. <a href='../'>Home</a>"
+    );
   });
 });
 
