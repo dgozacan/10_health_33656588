@@ -15,11 +15,24 @@
     <p>Date</p>
     <input type="date" name="workout_date" />
 
-    <p>Type (Run / Weights / Yoga)</p>
+    <p>Type (Run / Weights / Yoga, etc.)</p>
     <input name="type" />
 
     <p>Duration (mins)</p>
     <input type="number" name="duration_mins" min="1" />
+
+    <p>Body part you want to work next time</p>
+<select name="next_body_part">
+  <option value="">-- No plan yet --</option>
+  <option value="Legs">Legs</option>
+  <option value="Chest">Chest</option>
+  <option value="Back">Back</option>
+  <option value="Shoulders">Shoulders</option>
+  <option value="Arms">Arms</option>
+  <option value="Core">Core</option>
+  <option value="Cardio">Cardio</option>
+</select>
+
 
     <p>Notes (optional)</p>
     <input name="notes" />
