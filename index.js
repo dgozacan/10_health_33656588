@@ -9,10 +9,10 @@ const port = 8000;
 
 // MySQL pool 
 const db = mysql.createPool({
+  host: "localhost",
   user: "health_app",
   password: "qwertyuiop",
   database: "health",
-  socketPath: "/tmp/mysql.sock",
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
