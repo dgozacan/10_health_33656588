@@ -2,7 +2,6 @@
 const express = require("express");
 const router = express.Router();
 
-// Redirect if not logged in (relative path – Goldsmiths-safe)
 function redirectLogin(req, res, next) {
   if (!req.session.loggedIn) {
     return res.redirect("../users/login");
@@ -10,12 +9,10 @@ function redirectLogin(req, res, next) {
   next();
 }
 
-// Show add workout form
 router.get("/add", redirectLogin, (req, res) => {
   res.render("add_workout", { error: null });
 });
 
-// Handle add workout form
 router.post("/add", redirectLogin, (req, res) => {
   const workout_date = req.body.workout_date;
   const workout_name = req.body.workout_name;
@@ -53,7 +50,7 @@ router.post("/add", redirectLogin, (req, res) => {
         });
       }
 
-      // ✅ Relative redirect (stay inside /usr/339/)
+      
       res.redirect("../");
     }
   );
