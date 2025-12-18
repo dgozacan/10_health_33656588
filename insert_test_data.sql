@@ -4,7 +4,7 @@ USE health;
 INSERT INTO users (username, password_hash)
 VALUES (
   'gold',
-  '$2b$10$LwpDvqqaS1F6aHMZ.BVy6e7y3KMfjHtWWcbefn.sPHiY7B6pTIO7C'
+  '$2b$10$LtOiS7PWwgKmohsrgghyheHX8TGr2Z6byAshkXrk36f90rmKzO3kG'
 );
 
 -- Test workouts
