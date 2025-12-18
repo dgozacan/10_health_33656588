@@ -26,3 +26,9 @@ hr {
   margin-top: 20px;
   margin-bottom: 20px;
 }
+
+footer {
+  margin-top: 40px;
+  font-size: 0.9em;
+  color: #666;
+}
